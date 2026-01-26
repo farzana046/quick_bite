@@ -13,30 +13,20 @@ class RoleSelect extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-
-              Image.asset(
-                'assets/images/quickbite_logo.png',
-                width: 160,
-              ),
+              Image.asset('assets/images/quickbite_logo.png', width: 160),
 
               const SizedBox(height: 12),
 
               const Text(
                 "QuickBite",
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
               ),
 
               const SizedBox(height: 6),
 
               const Text(
-                "Select your role",
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey,
-                ),
+                "Welcome! Are you a...",
+                style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
 
               const SizedBox(height: 40),

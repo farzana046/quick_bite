@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:quick_bite/Screens/role_select.dart';
+import 'package:quick_bite/pages/role_select.dart';
+import 'package:quick_bite/pages/main_page.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Supabase.initialize(
+    url: 'https://wyijxzsqcnchfvsuxmzh.supabase.co',
+    anonKey: 'sb_publishable_Qt2LlbxggXVLtc_6-rdqKQ_abdiuKme',
+  );
+
   runApp(const MyApp());
 }
 
@@ -12,7 +21,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: RoleSelect(),
+      home: mainPage(),
     );
   }
 }
