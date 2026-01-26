@@ -23,20 +23,14 @@ class RoleSelect extends StatelessWidget {
 
               const Text(
                 "QuickBite",
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
               ),
 
               const SizedBox(height: 6),
 
               const Text(
-                "Select your role",
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey,
-                ),
+                "Welcome! Are you a...",
+                style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
 
               const SizedBox(height: 40),
