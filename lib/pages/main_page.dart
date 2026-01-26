@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:quick_bite/Screens/food_page.dart';
 import 'package:quick_bite/widgets/big_text.dart';
 import 'package:quick_bite/widgets/small_text.dart';
 
@@ -47,7 +46,6 @@ class _mainPageState extends State<mainPage> {
               ),
             ),
           ),
-          Food_Page_Body(),
         ],
       ),
     );
