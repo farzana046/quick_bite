@@ -16,7 +16,7 @@ class RoleSelect extends StatelessWidget {
 
               Image.asset(
                 'assets/images/quickbite_logo.png',
-                width: 160,
+                width: 300,
               ),
 
               const SizedBox(height: 12),
