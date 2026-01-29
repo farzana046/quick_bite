@@ -9,32 +9,28 @@ class RoleSelect extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.only(top: 40), 
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start, 
             children: [
 
+              // Logo
               Image.asset(
-                'assets/images/quickbite_logo.png',
-                width: 300,
+                'assets/images/quickbite_logo.jpg',
+                width: 350,
+                height: 300,
+                fit: BoxFit.contain,
               ),
 
-              const SizedBox(height: 12),
-
-              const Text(
-                "QuickBite",
-                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-              ),
-
-              const SizedBox(height: 6),
-
+              
               const Text(
                 "Welcome! Are you a...",
                 style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
 
-              const SizedBox(height: 40),
+              const SizedBox(height: 32), 
 
+              // Customer Button
               SizedBox(
                 width: double.infinity,
                 height: 55,
@@ -54,6 +50,7 @@ class RoleSelect extends StatelessWidget {
 
               const SizedBox(height: 16),
 
+              // Staff Button
               SizedBox(
                 width: double.infinity,
                 height: 55,
@@ -71,11 +68,14 @@ class RoleSelect extends StatelessWidget {
 
               const SizedBox(height: 16),
 
+              // Admin Button
               SizedBox(
                 width: double.infinity,
                 height: 55,
                 child: OutlinedButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/admin-login');
+                  },
                   icon: const Icon(Icons.shield_outlined),
                   label: const Text("Admin (Requires Login)"),
                   style: OutlinedButton.styleFrom(

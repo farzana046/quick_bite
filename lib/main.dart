@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:quick_bite/pages/role_select.dart';
-import 'package:quick_bite/pages/main_page.dart';
+import 'package:quick_bite/pages/admin/admin_login.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import 'pages/role_select.dart';
+import 'pages/main_page.dart';
+import 'pages/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,9 +22,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: RoleSelect(),
+      home: const SplashScreen(), // 👈 Splash Screen First
+      routes: {
+        '/admin-login': (context) => const AdminLoginPage(),
+        '/admin-home': (context) => const mainPage(),
+      },
     );
   }
 }
