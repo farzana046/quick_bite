@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:quick_bite/widgets/big_text.dart';
-import 'package:quick_bite/widgets/small_text.dart';
+import 'package:quick_bite/constants/big_text.dart';
+import 'package:quick_bite/constants/small_text.dart';
 
 class mainPage extends StatefulWidget {
   const mainPage({super.key});
