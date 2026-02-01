@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:quick_bite/auth/auth_service.dart';
-import '../auth/auth_service.dart';
 
 class AdminLoginPage extends StatefulWidget {
   const AdminLoginPage({super.key});
@@ -24,9 +23,9 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
 
       Navigator.pushReplacementNamed(context, '/admin-home');
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to sign in: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Failed to sign in: $e')));
     }
   }
 
