@@ -1,45 +1,59 @@
 import 'package:flutter/material.dart';
 import 'package:quick_bite/auth/auth_service.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-class AdminLoginPage extends StatefulWidget {
-  const AdminLoginPage({super.key});
+class StaffLoginPage extends StatefulWidget {
+  const StaffLoginPage({super.key});
 
   @override
-  State<AdminLoginPage> createState() => _AdminLoginPageState();
+  State<StaffLoginPage> createState() => _StaffLoginPageState();
 }
 
-class _AdminLoginPageState extends State<AdminLoginPage> {
+class _StaffLoginPageState extends State<StaffLoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
   final AuthService _authService = AuthService();
+  final SupabaseClient _supabase = Supabase.instance.client;
 
   Future<void> _signIn() async {
-    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter email and password')),
-      );
-      return;
-    }
-
     try {
+      // Sign in with email & password
       await _authService.signInWithEmailPassword(
         _emailController.text,
         _passwordController.text,
       );
 
+      // Get current signed-in email
       final sessionEmail = _authService.getCurrentUserEmail();
-      if (sessionEmail != 'admin@quickbite.com') {
+      if (sessionEmail == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('You are not authorized as admin')),
+          const SnackBar(content: Text('Failed to get user session')),
         );
         return;
       }
 
+      // Check if the email exists in the staff table
+      final staffResponse = await _supabase
+          .from('staff')
+          .select()
+          .eq('email', sessionEmail)
+          .maybeSingle();
+
+      if (staffResponse == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('You are not authorized as staff')),
+        );
+        return;
+      }
+
+      // Success message
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Signed in successfully!')),
+        const SnackBar(content: Text('Signed in successfully as staff')),
       );
 
-      Navigator.pushReplacementNamed(context, '/admin-home');
+      // Navigate to staff home (create a StaffHomePage for this route)
+      Navigator.pushReplacementNamed(context, '/staff-home');
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to sign in: $e')),
@@ -50,7 +64,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, 
+      backgroundColor: const Color(0xFFFFFFFF), 
       body: Center(
         child: SingleChildScrollView(
           child: Container(
@@ -77,7 +91,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                       TextSpan(
                         text: 'Quick',
                         style: TextStyle(
-                           color: Color(0xFFEA580C), 
+                          color: Color(0xFFEA580C), 
                           fontSize: 36,
                           fontWeight: FontWeight.bold,
                         ),
@@ -85,7 +99,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                       TextSpan(
                         text: 'Bite',
                         style: TextStyle(
-                          color: Colors.black87,
+                          color: Color(0xFF1F2937), 
                           fontSize: 36,
                           fontWeight: FontWeight.bold,
                         ),
@@ -95,17 +109,20 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                 ),
                 const SizedBox(height: 16),
                 const Text(
-                  'Admin Login',
+                  'Staff Login',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                    color: Color(0xFF1F2937), 
                   ),
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  'Enter your credentials to access the admin dashboard',
-                  style: TextStyle(fontSize: 14, color: Colors.grey),
+                  'Sign in to your staff account',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Color(0xFF4B5563), 
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 24),
@@ -116,7 +133,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                     labelText: 'Email',
                     prefixIcon: const Icon(Icons.email),
                     filled: true,
-                    fillColor: Colors.grey[100],
+                    fillColor: const Color(0xFFF9FAFB), 
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide.none,
@@ -132,7 +149,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                     labelText: 'Password',
                     prefixIcon: const Icon(Icons.lock),
                     filled: true,
-                    fillColor: Colors.grey[100],
+                    fillColor: const Color(0xFFF9FAFB),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide.none,
@@ -140,25 +157,25 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                   ),
                 ),
                 const SizedBox(height: 24),
-                // Login button
-               
-SizedBox(
-  width: double.infinity,
-  child: ElevatedButton(
-    onPressed: _signIn,
-    style: ElevatedButton.styleFrom(
-      backgroundColor: Colors.grey[700], 
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-    ),
-    child: const Text(
-      'Login',
-      style: TextStyle(fontSize: 16, color: Colors.white),
-    ),
-  ),
-),
+                // Login button (ash color)
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _signIn,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF4B5563), 
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text(
+                      'Sign In',
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
                 // Back to Role Selection
                 SizedBox(
                   width: double.infinity,
@@ -166,13 +183,12 @@ SizedBox(
                     cursor: SystemMouseCursors.click,
                     child: TextButton(
                       onPressed: () {
-                        Navigator.pushReplacementNamed(
-                            context, '/role-select');
+                        Navigator.pushReplacementNamed(context, '/role-select');
                       },
                       style: ButtonStyle(
                         overlayColor: MaterialStateProperty.resolveWith(
                           (states) => states.contains(MaterialState.hovered)
-                              ? Colors.grey[300] 
+                              ? const Color(0xFFF9FAFB) // ash hover
                               : null,
                         ),
                       ),
@@ -181,7 +197,7 @@ SizedBox(
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold, 
-                          color: Colors.black87,
+                          color: Color(0xFF1F2937), 
                         ),
                       ),
                     ),
