@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quick_bite/widgets/Name.dart';
 import 'package:quick_bite/widgets/catagories.dart';
+import 'package:quick_bite/widgets/menu_card.dart';
 import 'package:quick_bite/widgets/search.dart';
 
 class homePage extends StatelessWidget {
@@ -11,7 +12,12 @@ class homePage extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: ListView(
-          children: const [RestaurantName(), SearchWidget(), CategoryButton()],
+          children: const [
+            RestaurantName(),
+            SearchWidget(),
+            CategoryButton(),
+            MenuCardDemo(),
+          ],
         ),
       ),
     );

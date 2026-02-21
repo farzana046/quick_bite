@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quick_bite/pages/home_page.dart';
 
 class RoleSelect extends StatelessWidget {
   const RoleSelect({super.key});
@@ -9,11 +10,10 @@ class RoleSelect extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.only(top: 40), 
+          padding: const EdgeInsets.only(top: 40),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start, 
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-
               // Logo
               Image.asset(
                 'assets/images/quickbite_logo.jpg',
@@ -22,20 +22,25 @@ class RoleSelect extends StatelessWidget {
                 fit: BoxFit.contain,
               ),
 
-              
               const Text(
                 "Welcome! Are you a...",
                 style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
 
-              const SizedBox(height: 32), 
+              const SizedBox(height: 32),
 
               // Customer Button
               SizedBox(
                 width: double.infinity,
                 height: 55,
                 child: ElevatedButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const homePage()),
+                    );
+                  },
+
                   icon: const Icon(Icons.person_outline),
                   label: const Text("Customer (Scan QR)"),
                   style: ElevatedButton.styleFrom(

@@ -36,10 +36,7 @@ class MyApp extends StatelessWidget {
         cardColor: AppColors.error,
       ),
 
-       //home: const SplashScreen(),
-        //home: const RoleSelect(),
-        // home: const AdminLoginPage(),
-      home: const StaffLoginPage(),
+      home: const RoleSelect(),
 
       // Routes for navigation
       routes: {
