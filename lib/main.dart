@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
         cardColor: AppColors.error,
       ),
 
-      home: const homePage(),
+      home: const RoleSelect(),
 
       routes: {
         // role selection
