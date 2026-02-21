@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:quick_bite/constants/appcolors.dart';
 import 'package:quick_bite/pages/admin/admin_login.dart';
+import 'package:quick_bite/pages/staff/staff_login.dart';
 import 'package:quick_bite/pages/home_page.dart';
+import 'package:quick_bite/pages/role_select.dart';
+import 'package:quick_bite/pages/splash_screen.dart';
 import 'package:quick_bite/themes/theme_input.dart';
 import 'package:quick_bite/themes/themecolor.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-import 'pages/role_select.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,15 +38,14 @@ class MyApp extends StatelessWidget {
 
       home: const RoleSelect(),
 
+      // Routes for navigation
       routes: {
-        // role selection
         '/role-select': (context) => const RoleSelect(),
-
-        // customer flow
-        '/customer-home': (context) => const homePage(),
-
-        // admin flow (login only for now)
         '/admin-login': (context) => const AdminLoginPage(),
+        '/staff-login': (context) => const StaffLoginPage(),
+        '/admin-home': (context) => const homePage(), 
+        '/staff-home': (context) => const homePage(), 
+        '/customer-home': (context) => const homePage(),
       },
     );
   }
