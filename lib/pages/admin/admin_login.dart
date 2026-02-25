@@ -38,12 +38,15 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text('Signed in successfully!')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Signed in successfully!')),
+      );
 
       Navigator.pushReplacementNamed(context, '/admin-home');
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Failed to sign in: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to sign in: $e')),
+      );
     }
   }
 
@@ -51,6 +54,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      backgroundColor: Colors.white, 
       body: Center(
         child: SingleChildScrollView(
           child: Container(
@@ -78,6 +82,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                         text: 'Quick',
                         style: TextStyle(
                           color: Color(0xFFEA580C),
+                           color: Color(0xFFEA580C), 
                           fontSize: 36,
                           fontWeight: FontWeight.bold,
                         ),
@@ -131,6 +136,29 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                   decoration: InputDecoration(
                     labelText: 'Password',
                     prefixIcon: const Icon(Icons.lock),
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'Admin Login',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  'Enter your credentials to access the admin dashboard',
+                  style: TextStyle(fontSize: 14, color: Colors.grey),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 24),
+                // Email
+                TextField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    prefixIcon: const Icon(Icons.email),
                     filled: true,
                     fillColor: Colors.grey[100],
                     border: OutlineInputBorder(
@@ -159,6 +187,42 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 16),
+                // Password
+                TextField(
+                  controller: _passwordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    prefixIcon: const Icon(Icons.lock),
+                    filled: true,
+                    fillColor: Colors.grey[100],
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                // Login button
+               
+SizedBox(
+  width: double.infinity,
+  child: ElevatedButton(
+    onPressed: _signIn,
+    style: ElevatedButton.styleFrom(
+      backgroundColor: Colors.grey[700], 
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+    ),
+    child: const Text(
+      'Login',
+      style: TextStyle(fontSize: 16, color: Colors.white),
+    ),
+  ),
+),
                 // Back to Role Selection
                 SizedBox(
                   width: double.infinity,
@@ -167,11 +231,14 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                     child: TextButton(
                       onPressed: () {
                         Navigator.pushReplacementNamed(context, '/role-select');
+                        Navigator.pushReplacementNamed(
+                            context, '/role-select');
                       },
                       style: ButtonStyle(
                         overlayColor: MaterialStateProperty.resolveWith(
                           (states) => states.contains(MaterialState.hovered)
                               ? Colors.grey[300]
+                              ? Colors.grey[300] 
                               : null,
                         ),
                       ),
@@ -180,6 +247,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.bold, 
                           color: Colors.black87,
                         ),
                       ),

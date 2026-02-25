@@ -7,6 +7,7 @@ import 'package:quick_bite/pages/admin/admin_login.dart';
 import 'package:quick_bite/pages/staff/staff_login.dart';
 import 'package:quick_bite/pages/home_page.dart';
 import 'package:quick_bite/pages/role_select.dart';
+import 'package:quick_bite/pages/splash_screen.dart';
 import 'package:quick_bite/themes/theme_input.dart';
 import 'package:quick_bite/themes/themecolor.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -40,6 +41,8 @@ class MyApp extends StatelessWidget {
         cardColor: AppColors.error,
       ),
       home: const RoleSelect(),
+
+      // Routes for navigation
       routes: {
         '/role-select': (context) => const RoleSelect(),
         '/admin-login': (context) => const AdminLoginPage(),
@@ -48,6 +51,9 @@ class MyApp extends StatelessWidget {
         '/staff-home': (context) => HomePage(),
         '/customer-home': (context) => HomePage(),
         '/cart': (context) => const CartPage(),
+        '/admin-home': (context) => const homePage(), 
+        '/staff-home': (context) => const homePage(), 
+        '/customer-home': (context) => const homePage(),
       },
     );
   }
