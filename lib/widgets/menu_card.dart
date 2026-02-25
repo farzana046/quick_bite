@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:quick_bite/models/menuItems.dart';
+import '../models/menuItems.dart';
 
 class MenuCard extends StatelessWidget {
   final MenuItem item;
@@ -11,53 +9,29 @@ class MenuCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Slidable(
-      key: ValueKey(item.id),
-
-      endActionPane: ActionPane(
-        motion: const DrawerMotion(),
-        children: [
-          SlidableAction(
-            onPressed: (_) => onAdd(),
-            backgroundColor: Colors.green,
-            foregroundColor: Colors.white,
-            icon: Icons.add_shopping_cart,
-            label: 'Add',
-          ),
-        ],
-      ),
-
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      elevation: 3,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
         padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 8,
-              offset: Offset(0, 3),
-            ),
-          ],
-        ),
         child: Row(
           children: [
-            // Image
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: CachedNetworkImage(
-                imageUrl: item.imageUrl,
-                width: 80,
-                height: 80,
-                fit: BoxFit.cover,
-                placeholder: (_, __) => const CircularProgressIndicator(),
+            // 🔹 Item Image (if you have imageUrl)
+            if (item.imageUrl != null)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.network(
+                  item.imageUrl!,
+                  width: 80,
+                  height: 80,
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
 
             const SizedBox(width: 12),
 
-            // Details
+            // 🔹 Name + Price
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,24 +43,20 @@ class MenuCard extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 6),
                   Text(
-                    item.description,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 13, color: Colors.grey),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    '\$${item.price.toStringAsFixed(2)}',
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.orange,
-                    ),
+                    "৳${item.price}",
+                    style: const TextStyle(fontSize: 14, color: Colors.black),
                   ),
                 ],
               ),
+            ),
+
+            // 🔹 Add to Cart Button
+            IconButton(
+              icon: const Icon(Icons.add_shopping_cart),
+              color: Colors.green,
+              onPressed: onAdd, // 🔥 THIS CONNECTS TO CART
             ),
           ],
         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quick_bite/constants/appcolors.dart';
 import 'package:quick_bite/models/menuItems.dart';
 import 'package:quick_bite/services/cart_service.dart';
 import 'package:quick_bite/services/menu_service.dart';
@@ -18,14 +19,15 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Menu"),
+        title: const Text("Menu", style: TextStyle(color: Colors.white)),
+        backgroundColor: AppColors.primary,
         actions: [
           Consumer<CartService>(
             builder: (context, cart, child) {
               return Stack(
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.shopping_cart),
+                    icon: const Icon(Icons.shopping_cart, color: Colors.white),
                     onPressed: () {
                       Navigator.pushNamed(context, '/cart');
                     },
