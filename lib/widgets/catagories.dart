@@ -13,9 +13,9 @@ class CategoryButton extends StatelessWidget {
         children: [
           ElevatedButton(onPressed: () {}, child: const Text('All')),
           const SizedBox(width: 16),
-          OutlinedButton(onPressed: () {}, child: const Text('Main')),
+          OutlinedButton(onPressed: () {}, child: const Text('Burgers')),
           const SizedBox(width: 16),
-          OutlinedButton(onPressed: () {}, child: const Text('Starters')),
+          OutlinedButton(onPressed: () {}, child: const Text('Pizza')),
           const SizedBox(width: 16),
           OutlinedButton(onPressed: () {}, child: const Text('Desserts')),
           const SizedBox(width: 16),

@@ -55,16 +55,16 @@ class _StaffLoginPageState extends State<StaffLoginPage> {
       // Navigate to staff home (create a StaffHomePage for this route)
       Navigator.pushReplacementNamed(context, '/staff-home');
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to sign in: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Failed to sign in: $e')));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFFFFFF), 
+      backgroundColor: const Color(0xFFFFFFFF),
       body: Center(
         child: SingleChildScrollView(
           child: Container(
@@ -91,7 +91,7 @@ class _StaffLoginPageState extends State<StaffLoginPage> {
                       TextSpan(
                         text: 'Quick',
                         style: TextStyle(
-                          color: Color(0xFFEA580C), 
+                          color: Color(0xFFEA580C),
                           fontSize: 36,
                           fontWeight: FontWeight.bold,
                         ),
@@ -99,7 +99,7 @@ class _StaffLoginPageState extends State<StaffLoginPage> {
                       TextSpan(
                         text: 'Bite',
                         style: TextStyle(
-                          color: Color(0xFF1F2937), 
+                          color: Color(0xFF1F2937),
                           fontSize: 36,
                           fontWeight: FontWeight.bold,
                         ),
@@ -113,16 +113,13 @@ class _StaffLoginPageState extends State<StaffLoginPage> {
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF1F2937), 
+                    color: Color(0xFF1F2937),
                   ),
                 ),
                 const SizedBox(height: 8),
                 const Text(
                   'Sign in to your staff account',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Color(0xFF4B5563), 
-                  ),
+                  style: TextStyle(fontSize: 14, color: Color(0xFF4B5563)),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 24),
@@ -133,7 +130,7 @@ class _StaffLoginPageState extends State<StaffLoginPage> {
                     labelText: 'Email',
                     prefixIcon: const Icon(Icons.email),
                     filled: true,
-                    fillColor: const Color(0xFFF9FAFB), 
+                    fillColor: const Color(0xFFF9FAFB),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide.none,
@@ -163,7 +160,7 @@ class _StaffLoginPageState extends State<StaffLoginPage> {
                   child: ElevatedButton(
                     onPressed: _signIn,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF4B5563), 
+                      backgroundColor: const Color(0xFF4B5563),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -196,8 +193,8 @@ class _StaffLoginPageState extends State<StaffLoginPage> {
                         'Back to Role Selection',
                         style: TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.bold, 
-                          color: Color(0xFF1F2937), 
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF1F2937),
                         ),
                       ),
                     ),

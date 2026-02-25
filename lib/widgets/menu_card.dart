@@ -1,39 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-
-class MenuCardDemo extends StatelessWidget {
-  const MenuCardDemo({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: const [
-        MenuCard(),
-        MenuCard(),
-        MenuCard(),
-        MenuCard(),
-        MenuCard(),
-        MenuCard(),
-        MenuCard(),
-        MenuCard(),
-      ],
-    );
-  }
-}
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:quick_bite/models/menuItems.dart';
 
 class MenuCard extends StatelessWidget {
-  const MenuCard({super.key});
+  final MenuItem item;
+  final VoidCallback onAdd;
+
+  const MenuCard({super.key, required this.item, required this.onAdd});
 
   @override
   Widget build(BuildContext context) {
     return Slidable(
-      key: UniqueKey(),
+      key: ValueKey(item.id),
 
       endActionPane: ActionPane(
         motion: const DrawerMotion(),
         children: [
           SlidableAction(
-            onPressed: (_) {},
+            onPressed: (_) => onAdd(),
             backgroundColor: Colors.green,
             foregroundColor: Colors.white,
             icon: Icons.add_shopping_cart,
@@ -47,49 +32,57 @@ class MenuCard extends StatelessWidget {
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: const [
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
             BoxShadow(
               color: Colors.black12,
-              blurRadius: 10,
-              offset: Offset(0, 4),
+              blurRadius: 8,
+              offset: Offset(0, 3),
             ),
           ],
         ),
         child: Row(
           children: [
+            // Image
             ClipRRect(
-              borderRadius: BorderRadius.circular(14),
-              child: Image.network(
-                "https://images.unsplash.com/photo-1568901346375-23c9450c58cd",
-                width: 85,
-                height: 85,
+              borderRadius: BorderRadius.circular(12),
+              child: CachedNetworkImage(
+                imageUrl: item.imageUrl,
+                width: 80,
+                height: 80,
                 fit: BoxFit.cover,
+                placeholder: (_, __) => const CircularProgressIndicator(),
               ),
             ),
-            const SizedBox(width: 14),
-            const Expanded(
+
+            const SizedBox(width: 12),
+
+            // Details
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Classic Burger",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    item.name,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  SizedBox(height: 6),
+                  const SizedBox(height: 4),
                   Text(
-                    "Juicy beef patty with lettuce, tomato, and special sauce",
+                    item.description,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 13, color: Colors.grey),
+                    style: const TextStyle(fontSize: 13, color: Colors.grey),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 8),
                   Text(
-                    "\$12.99",
-                    style: TextStyle(
+                    '\$${item.price.toStringAsFixed(2)}',
+                    style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
-                      color: Colors.deepOrange,
+                      color: Colors.orange,
                     ),
                   ),
                 ],
