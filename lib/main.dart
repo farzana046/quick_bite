@@ -39,7 +39,10 @@ class MyApp extends StatelessWidget {
         shadowColor: AppColors.primary,
         cardColor: AppColors.error,
       ),
+
       home: const RoleSelect(),
+
+      // Routes for navigation
       routes: {
         '/role-select': (context) => const RoleSelect(),
         '/admin-login': (context) => const AdminLoginPage(),
