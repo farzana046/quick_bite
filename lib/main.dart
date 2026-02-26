@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quick_bite/pages/admin/admin_homapage.dart';
 import 'package:quick_bite/pages/cart_page.dart';
 import 'package:quick_bite/services/cart_service.dart';
 import 'package:quick_bite/constants/appcolors.dart';
 import 'package:quick_bite/pages/admin/admin_login.dart';
-import 'package:quick_bite/pages/staff/staff_login.dart';
 import 'package:quick_bite/pages/home_page.dart';
 import 'package:quick_bite/pages/role_select.dart';
 import 'package:quick_bite/themes/theme_input.dart';
@@ -42,14 +42,15 @@ class MyApp extends StatelessWidget {
 
       home: const RoleSelect(),
 
-      // Routes for navigation
       routes: {
         '/role-select': (context) => const RoleSelect(),
         '/admin-login': (context) => const AdminLoginPage(),
-        '/staff-login': (context) => const StaffLoginPage(),
-        '/admin-home': (context) => HomePage(),
-        '/staff-home': (context) => HomePage(),
-        '/customer-home': (context) => HomePage(),
+
+        // ✅ FIXED
+        '/admin-home': (context) => const AdminHomePage(),
+
+        '/staff-home': (context) => const HomePage(),
+        '/customer-home': (context) => const HomePage(),
         '/cart': (context) => const CartPage(),
       },
     );

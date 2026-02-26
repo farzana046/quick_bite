@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SearchWidget extends StatelessWidget {
-  const SearchWidget({super.key});
+  const SearchWidget({super.key, required Null Function() onChanged});
 
   @override
   Widget build(BuildContext context) {

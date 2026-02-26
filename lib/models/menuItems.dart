@@ -19,10 +19,10 @@ class MenuItem {
     return MenuItem(
       id: json['id'],
       name: json['name'],
-      description: json['description'],
+      description: json['description'] ?? '',
       price: (json['price'] as num).toDouble(),
-      imageUrl: json['image_url'],
-      category: json['category'],
+      imageUrl: json['image_url'] ?? '',
+      category: json['category'] ?? 'All',
     );
   }
 }
