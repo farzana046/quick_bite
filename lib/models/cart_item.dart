@@ -1,4 +1,4 @@
-import 'menuItems.dart';
+import 'package:quick_bite/models/menuItems.dart';
 
 class CartItem {
   final MenuItem item;

@@ -17,12 +17,11 @@ class MenuCard extends StatelessWidget {
         padding: const EdgeInsets.all(12),
         child: Row(
           children: [
-            // 🔹 Item Image (if you have imageUrl)
-            if (item.imageUrl != null)
+            if (item.imageUrl.isNotEmpty)
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Image.network(
-                  item.imageUrl!,
+                  item.imageUrl,
                   width: 80,
                   height: 80,
                   fit: BoxFit.cover,
@@ -31,7 +30,6 @@ class MenuCard extends StatelessWidget {
 
             const SizedBox(width: 12),
 
-            // 🔹 Name + Price
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,19 +42,15 @@ class MenuCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 6),
-                  Text(
-                    "৳${item.price}",
-                    style: const TextStyle(fontSize: 14, color: Colors.black),
-                  ),
+                  Text("৳${item.price}"),
                 ],
               ),
             ),
 
-            // 🔹 Add to Cart Button
             IconButton(
               icon: const Icon(Icons.add_shopping_cart),
               color: Colors.green,
-              onPressed: onAdd, // 🔥 THIS CONNECTS TO CART
+              onPressed: onAdd,
             ),
           ],
         ),

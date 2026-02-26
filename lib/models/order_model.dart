@@ -13,10 +13,10 @@ class OrderModel {
 
   factory OrderModel.fromMap(Map<String, dynamic> map) {
     return OrderModel(
-      id: map['id'],
-      tableNumber: map['table_number'],
+      id: map['id'] as String,
+      tableNumber: map['table_number'] as int,
       totalPrice: (map['total_price'] as num).toDouble(),
-      status: map['status'],
+      status: map['status'] as String,
     );
   }
 }

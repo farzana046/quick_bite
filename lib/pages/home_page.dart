@@ -25,8 +25,9 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: StreamBuilder<List<MenuItem>>(
-          stream: _menuService.streamMenuItems(selectedCategory),
+        child: FutureBuilder<List<MenuItem>>(
+          /// 🔥 FIX #1: USE USER MENU
+          future: _menuService.getUserMenu(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -38,10 +39,17 @@ class _HomePageState extends State<HomePage> {
 
             final items = snapshot.data ?? [];
 
+            /// 🔹 FILTER BY CATEGORY
+            final filteredItems = selectedCategory == "All"
+                ? items
+                : items
+                      .where((item) => item.category == selectedCategory)
+                      .toList();
+
             return ListView(
               padding: const EdgeInsets.symmetric(vertical: 16),
               children: [
-                /// TOP ROW: Restaurant Name + Cart Icon
+                /// 🔹 TOP BAR
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 18),
                   child: Row(
@@ -92,14 +100,12 @@ class _HomePageState extends State<HomePage> {
 
                 const SizedBox(height: 16),
 
-                /// SEARCH
-                SearchWidget(
-                  onChanged: () {
-                    // Optional: filter items locally if needed
-                  },
-                ),
+                /// 🔹 SEARCH
+                SearchWidget(onChanged: () {}),
 
-                /// CATEGORY BUTTONS
+                const SizedBox(height: 10),
+
+                /// 🔹 CATEGORY FILTER
                 CategoryButton(
                   selectedCategory: selectedCategory,
                   onCategorySelected: (category) {
@@ -111,17 +117,18 @@ class _HomePageState extends State<HomePage> {
 
                 const SizedBox(height: 10),
 
-                if (items.isEmpty)
+                if (filteredItems.isEmpty)
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 20),
                     child: Center(child: Text("No items found")),
                   ),
 
-                /// MENU ITEMS
-                ...items.map(
+                /// 🔹 MENU LIST
+                ...filteredItems.map(
                   (item) => MenuCard(
-                    item: item,
+                    item: item, // 🔥 FIX #2: CORRECT MODEL
                     onAdd: () {
+                      /// 🔥 FIX #3: ADD TO CART WORKS
                       context.read<CartService>().addToCart(item);
                     },
                   ),
