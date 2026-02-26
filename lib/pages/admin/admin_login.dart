@@ -22,35 +22,41 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
     }
 
     try {
+      // 🔐 Sign in
       await _authService.signInWithEmailPassword(
-        _emailController.text,
-        _passwordController.text,
+        _emailController.text.trim(),
+        _passwordController.text.trim(),
       );
 
-      final sessionEmail = _authService.getCurrentUserEmail();
-      if (sessionEmail != 'admin@quickbite.com') {
+      final email = _authService.getCurrentUserEmail();
+
+      // ❌ Not admin → logout
+      if (email != 'admin@quickbite.com') {
+        await _authService.signOut();
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('You are not authorized as admin')),
         );
         return;
       }
 
+      // ✅ Admin success
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Signed in successfully!')),
+        const SnackBar(content: Text('Admin signed in successfully')),
       );
 
+      // 🚀 GO TO ADMIN HOME
       Navigator.pushReplacementNamed(context, '/admin-home');
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to sign in: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Failed to sign in: $e')));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, 
+      backgroundColor: Colors.white,
       body: Center(
         child: SingleChildScrollView(
           child: Container(
@@ -70,14 +76,14 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // QuickBite Text
+                // 🔥 QuickBite Logo
                 RichText(
                   text: const TextSpan(
                     children: [
                       TextSpan(
                         text: 'Quick',
                         style: TextStyle(
-                           color: Color(0xFFEA580C), 
+                          color: Color(0xFFEA580C),
                           fontSize: 36,
                           fontWeight: FontWeight.bold,
                         ),
@@ -93,7 +99,9 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                     ],
                   ),
                 ),
+
                 const SizedBox(height: 16),
+
                 const Text(
                   'Admin Login',
                   style: TextStyle(
@@ -102,14 +110,18 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                     color: Colors.black87,
                   ),
                 ),
+
                 const SizedBox(height: 8),
+
                 const Text(
                   'Enter your credentials to access the admin dashboard',
                   style: TextStyle(fontSize: 14, color: Colors.grey),
                   textAlign: TextAlign.center,
                 ),
+
                 const SizedBox(height: 24),
-                // Email
+
+                // 📧 Email
                 TextField(
                   controller: _emailController,
                   decoration: InputDecoration(
@@ -123,8 +135,10 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                     ),
                   ),
                 ),
+
                 const SizedBox(height: 16),
-                // Password
+
+                // 🔒 Password
                 TextField(
                   controller: _passwordController,
                   obscureText: true,
@@ -139,50 +153,43 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                     ),
                   ),
                 ),
+
                 const SizedBox(height: 24),
-                // Login button
-               
-SizedBox(
-  width: double.infinity,
-  child: ElevatedButton(
-    onPressed: _signIn,
-    style: ElevatedButton.styleFrom(
-      backgroundColor: Colors.grey[700], 
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-    ),
-    child: const Text(
-      'Login',
-      style: TextStyle(fontSize: 16, color: Colors.white),
-    ),
-  ),
-),
-                // Back to Role Selection
+
+                // 🔑 Login Button
                 SizedBox(
                   width: double.infinity,
-                  child: MouseRegion(
-                    cursor: SystemMouseCursors.click,
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(
-                            context, '/role-select');
-                      },
-                      style: ButtonStyle(
-                        overlayColor: MaterialStateProperty.resolveWith(
-                          (states) => states.contains(MaterialState.hovered)
-                              ? Colors.grey[300] 
-                              : null,
-                        ),
+                  child: ElevatedButton(
+                    onPressed: _signIn,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.grey[700],
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Text(
-                        'Back to Role Selection',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold, 
-                          color: Colors.black87,
-                        ),
+                    ),
+                    child: const Text(
+                      'Login',
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 12),
+
+                // 🔙 Back Button
+                SizedBox(
+                  width: double.infinity,
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(context, '/role-select');
+                    },
+                    child: const Text(
+                      'Back to Role Selection',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
                       ),
                     ),
                   ),

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:quick_bite/pages/admin/admin_homapage.dart';
+import 'package:quick_bite/pages/cart_page.dart';
+import 'package:quick_bite/services/cart_service.dart';
 import 'package:quick_bite/constants/appcolors.dart';
 import 'package:quick_bite/pages/admin/admin_login.dart';
-import 'package:quick_bite/pages/staff/staff_login.dart';
 import 'package:quick_bite/pages/home_page.dart';
 import 'package:quick_bite/pages/role_select.dart';
-import 'package:quick_bite/pages/splash_screen.dart';
 import 'package:quick_bite/themes/theme_input.dart';
 import 'package:quick_bite/themes/themecolor.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -17,7 +19,9 @@ void main() async {
     anonKey: 'sb_publishable_Qt2LlbxggXVLtc_6-rdqKQ_abdiuKme',
   );
 
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(create: (_) => CartService(), child: const MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -38,14 +42,16 @@ class MyApp extends StatelessWidget {
 
       home: const RoleSelect(),
 
-      // Routes for navigation
       routes: {
         '/role-select': (context) => const RoleSelect(),
         '/admin-login': (context) => const AdminLoginPage(),
-        '/staff-login': (context) => const StaffLoginPage(),
-        '/admin-home': (context) => const homePage(), 
-        '/staff-home': (context) => const homePage(), 
-        '/customer-home': (context) => const homePage(),
+
+        // ✅ FIXED
+        '/admin-home': (context) => const AdminHomePage(),
+
+        '/staff-home': (context) => const HomePage(),
+        '/customer-home': (context) => const HomePage(),
+        '/cart': (context) => const CartPage(),
       },
     );
   }
