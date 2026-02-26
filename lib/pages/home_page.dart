@@ -9,56 +9,21 @@ import '../widgets/search.dart';
 import '../widgets/catagories.dart';
 import '../widgets/menu_card.dart';
 
-class HomePage extends StatelessWidget {
-  HomePage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final MenuService _menuService = MenuService();
-  final String selectedCategory = "All";
+  String selectedCategory = "All";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Menu", style: TextStyle(color: Colors.white)),
-        backgroundColor: AppColors.primary,
-        actions: [
-          Consumer<CartService>(
-            builder: (context, cart, child) {
-              return Stack(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.shopping_cart, color: Colors.white),
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/cart');
-                    },
-                  ),
-
-                  if (cart.totalItems > 0)
-                    Positioned(
-                      right: 5,
-                      top: 5,
-                      child: Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: const BoxDecoration(
-                          color: Colors.red,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Text(
-                          cart.totalItems.toString(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
-                    ),
-                ],
-              );
-            },
-          ),
-        ],
-      ),
-
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: StreamBuilder<List<MenuItem>>(
           stream: _menuService.streamMenuItems(selectedCategory),
@@ -73,16 +38,86 @@ class HomePage extends StatelessWidget {
 
             final items = snapshot.data ?? [];
 
-            if (items.isEmpty) {
-              return const Center(child: Text("No items found"));
-            }
-
             return ListView(
+              padding: const EdgeInsets.symmetric(vertical: 16),
               children: [
-                const RestaurantName(),
-                const SearchWidget(),
-                const CategoryButton(),
+                /// TOP ROW: Restaurant Name + Cart Icon
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const RestaurantName(),
+                      Consumer<CartService>(
+                        builder: (context, cart, child) {
+                          return Stack(
+                            children: [
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.shopping_cart,
+                                  color: AppColors.primary,
+                                  size: 28,
+                                ),
+                                onPressed: () {
+                                  Navigator.pushNamed(context, '/cart');
+                                },
+                              ),
+                              if (cart.totalItems > 0)
+                                Positioned(
+                                  right: 4,
+                                  top: 4,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(4),
+                                    decoration: const BoxDecoration(
+                                      color: Colors.red,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Text(
+                                      cart.totalItems.toString(),
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 16),
+
+                /// SEARCH
+                SearchWidget(
+                  onChanged: () {
+                    // Optional: filter items locally if needed
+                  },
+                ),
+
+                /// CATEGORY BUTTONS
+                CategoryButton(
+                  selectedCategory: selectedCategory,
+                  onCategorySelected: (category) {
+                    setState(() {
+                      selectedCategory = category;
+                    });
+                  },
+                ),
+
                 const SizedBox(height: 10),
+
+                if (items.isEmpty)
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                    child: Center(child: Text("No items found")),
+                  ),
+
+                /// MENU ITEMS
                 ...items.map(
                   (item) => MenuCard(
                     item: item,
@@ -91,6 +126,7 @@ class HomePage extends StatelessWidget {
                     },
                   ),
                 ),
+
                 const SizedBox(height: 20),
               ],
             );
