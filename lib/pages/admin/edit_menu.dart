@@ -20,7 +20,13 @@ class _EditMenuItemPageState extends State<EditMenuItemPage> {
 
   String _selectedCategory = 'Burgers';
 
-  final List<String> _categories = ['Burgers', 'Pizza', 'Desserts', 'Drinks'];
+  final List<String> _categories = [
+    'Burgers',
+    'Pizza',
+    'Chickens',
+    'Desserts',
+    'Drinks',
+  ];
 
   @override
   void initState() {
@@ -78,100 +84,168 @@ class _EditMenuItemPageState extends State<EditMenuItemPage> {
     final isEdit = widget.item != null;
 
     return Scaffold(
-      appBar: AppBar(title: Text(isEdit ? "Edit Menu Item" : "Add Menu Item")),
+      backgroundColor: const Color(0xFFFFF7F0),
+      appBar: AppBar(
+        title: Text(isEdit ? "Edit Menu Item" : "Add Menu Item"),
+        elevation: 0,
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Item name
-            TextField(
-              controller: _nameController,
-              decoration: const InputDecoration(
-                labelText: "Item Name",
-                border: OutlineInputBorder(),
+            /// SECTION: BASIC INFO
+            _SectionTitle("Basic Information"),
+
+            _Card(
+              child: Column(
+                children: [
+                  TextField(
+                    controller: _nameController,
+                    decoration: const InputDecoration(
+                      labelText: "Item Name",
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  TextField(
+                    controller: _priceController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      labelText: "Price (৳)",
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ],
               ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
 
-            // Price
-            TextField(
-              controller: _priceController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: "Price (৳)",
-                border: OutlineInputBorder(),
+            /// SECTION: IMAGE
+            _SectionTitle("Item Image"),
+
+            _Card(
+              child: Column(
+                children: [
+                  TextField(
+                    controller: _imageUrlController,
+                    onChanged: (_) => setState(() {}),
+                    decoration: const InputDecoration(
+                      labelText: "Image URL",
+                      hintText: "https://example.com/image.jpg",
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  if (_imageUrlController.text.isNotEmpty)
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.network(
+                        _imageUrlController.text,
+                        height: 160,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => Container(
+                          height: 160,
+                          color: Colors.black12,
+                          alignment: Alignment.center,
+                          child: const Text("Invalid image URL"),
+                        ),
+                      ),
+                    ),
+                ],
               ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
 
-            // Image URL
-            TextField(
-              controller: _imageUrlController,
-              onChanged: (_) => setState(() {}),
-              decoration: const InputDecoration(
-                labelText: "Image URL",
-                hintText: "https://example.com/image.jpg",
-                border: OutlineInputBorder(),
+            /// SECTION: CATEGORY
+            _SectionTitle("Category"),
+
+            _Card(
+              child: DropdownButtonFormField<String>(
+                value: _selectedCategory,
+                decoration: const InputDecoration(border: OutlineInputBorder()),
+                items: _categories
+                    .map((c) => DropdownMenuItem(value: c, child: Text(c)))
+                    .toList(),
+                onChanged: (value) {
+                  if (value != null) {
+                    setState(() => _selectedCategory = value);
+                  }
+                },
               ),
-            ),
-
-            const SizedBox(height: 12),
-
-            // Image Preview
-            if (_imageUrlController.text.isNotEmpty)
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.network(
-                  _imageUrlController.text,
-                  height: 160,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) =>
-                      const Center(child: Text("Invalid image URL")),
-                ),
-              ),
-
-            const SizedBox(height: 16),
-
-            // Category
-            DropdownButtonFormField<String>(
-              value: _selectedCategory,
-              decoration: const InputDecoration(
-                labelText: "Category",
-                border: OutlineInputBorder(),
-              ),
-              items: _categories
-                  .map((c) => DropdownMenuItem(value: c, child: Text(c)))
-                  .toList(),
-              onChanged: (value) {
-                if (value != null) {
-                  setState(() {
-                    _selectedCategory = value;
-                  });
-                }
-              },
             ),
 
             const SizedBox(height: 28),
 
-            // Save button
+            /// SAVE BUTTON
             SizedBox(
               width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: _saveItem,
-                child: Text(
-                  isEdit ? "Update Item" : "Add Item",
-                  style: const TextStyle(fontSize: 16),
+              height: 48,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFFFFA726), Color(0xFFFF8F00)],
+                  ),
+                ),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                    shadowColor: Colors.transparent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  onPressed: _saveItem,
+                  child: Text(
+                    isEdit ? "Update Item" : "Add Item",
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.3,
+                    ),
+                  ),
                 ),
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+/// ---------- SMALL UI HELPERS ----------
+
+class _SectionTitle extends StatelessWidget {
+  final String text;
+  const _SectionTitle(this.text);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Text(
+        text,
+        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+      ),
+    );
+  }
+}
+
+class _Card extends StatelessWidget {
+  final Widget child;
+  const _Card({required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 1.5,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+      child: Padding(padding: const EdgeInsets.all(14), child: child),
     );
   }
 }

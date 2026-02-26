@@ -30,7 +30,6 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
 
       final email = _authService.getCurrentUserEmail();
 
-      // ❌ Not admin → logout
       if (email != 'admin@quickbite.com') {
         await _authService.signOut();
         ScaffoldMessenger.of(context).showSnackBar(

@@ -10,11 +10,12 @@ class OrderService {
     final response = await supabase
         .from('orders')
         .select()
-        .eq('status', 'pending')
-        .order('created_at', ascending: true)
-        .order('table_number', ascending: true);
+        .neq('status', 'served') // ✅ hide only served
+        .order('created_at', ascending: true);
 
-    return (response as List)
+    final List data = response as List;
+
+    return data
         .map((order) => OrderModel.fromMap(Map<String, dynamic>.from(order)))
         .toList();
   }
