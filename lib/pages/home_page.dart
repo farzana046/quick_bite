@@ -18,36 +18,53 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final MenuService _menuService = MenuService();
+
+  late Future<List<MenuItem>> _menuFuture; // ✅ cached future
+
   String selectedCategory = "All";
+  String searchQuery = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _menuFuture = _menuService.getUserMenu(); // ✅ fetch ONCE
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFFFF7F0),
       body: SafeArea(
         child: FutureBuilder<List<MenuItem>>(
-          /// 🔥 FIX #1: USE USER MENU
-          future: _menuService.getUserMenu(),
+          future: _menuFuture,
           builder: (context, snapshot) {
+            // Loading
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             }
 
+            // Error
             if (snapshot.hasError) {
-              return Center(child: Text("Error: ${snapshot.error}"));
+              return const Center(child: Text("Something went wrong"));
             }
 
             final items = snapshot.data ?? [];
 
-            /// 🔹 FILTER BY CATEGORY
-            final filteredItems = selectedCategory == "All"
-                ? items
-                : items
-                      .where((item) => item.category == selectedCategory)
-                      .toList();
+            /// ✅ FILTER LOCALLY (fast, no API call)
+            final filteredItems = items.where((item) {
+              final matchesCategory =
+                  selectedCategory == "All" ||
+                  item.category == selectedCategory;
+
+              final matchesSearch = item.name.toLowerCase().contains(
+                searchQuery,
+              );
+
+              return matchesCategory && matchesSearch;
+            }).toList();
 
             return ListView(
-              padding: const EdgeInsets.symmetric(vertical: 16),
+              padding: const EdgeInsets.only(top: 16, bottom: 24),
               children: [
                 /// 🔹 TOP BAR
                 Padding(
@@ -72,19 +89,19 @@ class _HomePageState extends State<HomePage> {
                               ),
                               if (cart.totalItems > 0)
                                 Positioned(
-                                  right: 4,
-                                  top: 4,
+                                  right: 2,
+                                  top: 2,
                                   child: Container(
                                     padding: const EdgeInsets.all(4),
                                     decoration: const BoxDecoration(
-                                      color: Colors.red,
+                                      color: Colors.redAccent,
                                       shape: BoxShape.circle,
                                     ),
                                     child: Text(
                                       cart.totalItems.toString(),
                                       style: const TextStyle(
                                         color: Colors.white,
-                                        fontSize: 12,
+                                        fontSize: 11,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -98,12 +115,21 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
 
-                const SizedBox(height: 16),
+                const SizedBox(height: 18),
 
-                /// 🔹 SEARCH
-                SearchWidget(onChanged: () {}),
+                /// 🔹 SEARCH (NO LAG NOW)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: SearchWidget(
+                    onChanged: (value) {
+                      setState(() {
+                        searchQuery = value.toLowerCase();
+                      });
+                    },
+                  ),
+                ),
 
-                const SizedBox(height: 10),
+                const SizedBox(height: 14),
 
                 /// 🔹 CATEGORY FILTER
                 CategoryButton(
@@ -115,26 +141,39 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
 
-                const SizedBox(height: 10),
+                const SizedBox(height: 14),
 
+                /// 🔹 EMPTY STATE
                 if (filteredItems.isEmpty)
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20),
-                    child: Center(child: Text("No items found")),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 40),
+                    child: Column(
+                      children: const [
+                        Icon(Icons.search_off, size: 48, color: Colors.black38),
+                        SizedBox(height: 12),
+                        Text(
+                          "No items found",
+                          style: TextStyle(fontSize: 16, color: Colors.black54),
+                        ),
+                      ],
+                    ),
                   ),
 
                 /// 🔹 MENU LIST
                 ...filteredItems.map(
-                  (item) => MenuCard(
-                    item: item, // 🔥 FIX #2: CORRECT MODEL
-                    onAdd: () {
-                      /// 🔥 FIX #3: ADD TO CART WORKS
-                      context.read<CartService>().addToCart(item);
-                    },
+                  (item) => Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 4,
+                    ),
+                    child: MenuCard(
+                      item: item,
+                      onAdd: () {
+                        context.read<CartService>().addToCart(item);
+                      },
+                    ),
                   ),
                 ),
-
-                const SizedBox(height: 20),
               ],
             );
           },

@@ -11,55 +11,82 @@ class AdminOrdersPage extends StatefulWidget {
 
 class _AdminOrdersPageState extends State<AdminOrdersPage> {
   final OrderService _orderService = OrderService();
-  late Future<List<OrderModel>> _orders;
+  late Future<List<OrderModel>> _ordersFuture;
 
   @override
   void initState() {
     super.initState();
-    _orders = _orderService.getOrders();
+    _loadOrders();
   }
 
-  void refresh() {
+  void _loadOrders() {
+    _ordersFuture = _orderService.getOrders();
+  }
+
+  Future<void> _updateStatus(String orderId, String status) async {
+    await _orderService.updateStatus(orderId, status);
     setState(() {
-      _orders = _orderService.getOrders();
+      _loadOrders(); // refresh list
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Orders")),
+      appBar: AppBar(title: const Text("Pending Orders")),
       body: FutureBuilder<List<OrderModel>>(
-        future: _orders,
+        future: _ordersFuture,
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
+          // Loading
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          final orders = snapshot.data!;
+          // Error
+          if (snapshot.hasError) {
+            return const Center(child: Text("Failed to load orders"));
+          }
+
+          final orders = snapshot.data ?? [];
+
+          // Empty
+          if (orders.isEmpty) {
+            return const Center(child: Text("No pending orders"));
+          }
 
           return ListView.builder(
+            padding: const EdgeInsets.all(12),
             itemCount: orders.length,
             itemBuilder: (_, index) {
               final order = orders[index];
 
               return Card(
+                elevation: 3,
+                margin: const EdgeInsets.only(bottom: 12),
                 child: ListTile(
-                  title: Text("Table ${order.tableNumber}"),
+                  title: Text(
+                    "Table ${order.tableNumber}",
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
                   subtitle: Text("৳${order.totalPrice}"),
                   trailing: DropdownButton<String>(
                     value: order.status,
-                    items: ["pending", "preparing", "served"]
-                        .map(
-                          (status) => DropdownMenuItem(
-                            value: status,
-                            child: Text(status),
-                          ),
-                        )
-                        .toList(),
-                    onChanged: (value) async {
-                      await _orderService.updateStatus(order.id, value!);
-                      refresh();
+                    underline: const SizedBox(),
+                    items: const [
+                      DropdownMenuItem(
+                        value: 'pending',
+                        child: Text('Pending'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'preparing',
+                        child: Text('Preparing'),
+                      ),
+                      DropdownMenuItem(value: 'served', child: Text('Served')),
+                    ],
+                    onChanged: (value) {
+                      if (value != null) {
+                        _updateStatus(order.id, value);
+                      }
                     },
                   ),
                 ),

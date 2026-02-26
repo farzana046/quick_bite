@@ -7,90 +7,94 @@ class RoleSelect extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 40),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              // Logo
-              Image.asset(
-                'assets/images/quickbite_logo.jpg',
-                width: 350,
-                height: 300,
-                fit: BoxFit.contain,
-              ),
+      backgroundColor: const Color(0xFFFFF7F0), // 👈 SMART BACKGROUND
+      body: SafeArea(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Logo
+                Image.asset(
+                  'assets/images/quickbite_logo.jpg',
+                  height: 200,
+                  fit: BoxFit.contain,
+                ),
 
-              const Text(
-                "Welcome! Are you a...",
-                style: TextStyle(fontSize: 16, color: Colors.grey),
-              ),
+                const SizedBox(height: 16),
 
-              const SizedBox(height: 32),
+                const Text(
+                  "Welcome to QuickBite",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                ),
 
-              // Customer Button
-              SizedBox(
-                width: double.infinity,
-                height: 55,
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
-                    );
-                  },
+                const SizedBox(height: 6),
 
-                  icon: const Icon(Icons.person_outline),
-                  label: const Text("Customer (Scan QR)"),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                const Text(
+                  "Choose how you want to continue",
+                  style: TextStyle(fontSize: 15, color: Colors.black54),
+                ),
+
+                const SizedBox(height: 24),
+
+                // Customer Button
+                SizedBox(
+                  width: double.infinity,
+                  height: 56,
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.person_outline),
+                    label: const Text(
+                      "Continue as Customer",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => HomePage()),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orangeAccent,
+                      foregroundColor: Colors.white,
+                      elevation: 3,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
                     ),
                   ),
                 ),
-              ),
 
-              const SizedBox(height: 16),
+                const SizedBox(height: 14),
 
-              // Staff Button
-              SizedBox(
-                width: double.infinity,
-                height: 55,
-                child: OutlinedButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.restaurant),
-                  label: const Text("Staff (Kitchen/Waiter)"),
-                  style: OutlinedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                // Admin Button
+                SizedBox(
+                  width: double.infinity,
+                  height: 56,
+                  child: OutlinedButton.icon(
+                    icon: const Icon(Icons.shield_outlined),
+                    label: const Text(
+                      "Admin Panel",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/admin-login');
+                    },
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.black87,
+                      side: const BorderSide(color: Colors.black26),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
                     ),
                   ),
                 ),
-              ),
-
-              const SizedBox(height: 16),
-
-              // Admin Button
-              SizedBox(
-                width: double.infinity,
-                height: 55,
-                child: OutlinedButton.icon(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/admin-login');
-                  },
-                  icon: const Icon(Icons.shield_outlined),
-                  label: const Text("Admin (Requires Login)"),
-                  style: OutlinedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

@@ -5,35 +5,65 @@ class CategoryButton extends StatelessWidget {
   final Function(String) onCategorySelected;
 
   const CategoryButton({
-    Key? key,
+    super.key,
     required this.selectedCategory,
     required this.onCategorySelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    final categories = ['All', 'Burgers', 'Pizza', 'Desserts', 'Drinks'];
+    final categories = [
+      'All',
+      'Burgers',
+      'Pizza',
+      'Chickens', // ✅ NEW
+      'Desserts',
+      'Drinks',
+    ];
 
-    return Container(
-      height: 48,
-      margin: const EdgeInsets.only(left: 18, right: 18, bottom: 32),
+    return SizedBox(
+      height: 46,
       child: ListView.separated(
+        padding: const EdgeInsets.symmetric(horizontal: 18),
         scrollDirection: Axis.horizontal,
         itemCount: categories.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 16),
+        separatorBuilder: (_, __) => const SizedBox(width: 10),
         itemBuilder: (context, index) {
           final category = categories[index];
           final isSelected = selectedCategory == category;
 
-          return isSelected
-              ? ElevatedButton(
-                  onPressed: () => onCategorySelected(category),
-                  child: Text(category),
-                )
-              : OutlinedButton(
-                  onPressed: () => onCategorySelected(category),
-                  child: Text(category),
-                );
+          return GestureDetector(
+            onTap: () => onCategorySelected(category),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              padding: const EdgeInsets.symmetric(horizontal: 18),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: isSelected ? Colors.orangeAccent : Colors.white,
+                borderRadius: BorderRadius.circular(22),
+                border: Border.all(
+                  color: isSelected ? Colors.orangeAccent : Colors.black12,
+                ),
+                boxShadow: isSelected
+                    ? [
+                        BoxShadow(
+                          color: Colors.orangeAccent.withOpacity(0.35),
+                          blurRadius: 6,
+                          offset: const Offset(0, 3),
+                        ),
+                      ]
+                    : [],
+              ),
+              child: Text(
+                category,
+                style: TextStyle(
+                  fontSize: 14.5,
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                  color: isSelected ? Colors.white : Colors.black87,
+                ),
+              ),
+            ),
+          );
         },
       ),
     );
