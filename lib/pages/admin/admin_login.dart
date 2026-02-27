@@ -30,7 +30,8 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
 
       final email = _authService.getCurrentUserEmail();
 
-      if (email != 'admin@quickbite.com') {
+      final allowedAdmins = ['admin@quickbite.com', 'manager@quickbite.com'];
+      if (!allowedAdmins.contains(email)) {
         await _authService.signOut();
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('You are not authorized as admin')),
