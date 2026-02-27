@@ -3,9 +3,9 @@ import '../models/menuItem_model.dart';
 import '../models/menuItems.dart';
 
 class MenuService {
-  final supabase = Supabase.instance.client;
+  final SupabaseClient supabase = Supabase.instance.client;
 
-  /// 🔹 ADMIN MENU (unchanged)
+  /// 🔹 ADMIN MENU
   Future<List<MenuItemModel>> getMenu() async {
     final response = await supabase.from('menu_items').select();
     final List data = response as List;
@@ -15,7 +15,7 @@ class MenuService {
         .toList();
   }
 
-  /// 🔹 USER MENU (NEW & CLEAN)
+  /// 🔹 USER MENU
   Future<List<MenuItem>> getUserMenu() async {
     final response = await supabase.from('menu_items').select();
     final List data = response as List;
@@ -25,18 +25,41 @@ class MenuService {
         .toList();
   }
 
-  /// ADMIN CRUD (unchanged)
-  Future<void> addMenuItem(String name, double price) async {
-    await supabase.from('menu_items').insert({'name': name, 'price': price});
+  /// 🔹 ADD MENU ITEM
+  Future<void> addMenuItem({
+    required String name,
+    required double price,
+    required String imageUrl,
+    required String category,
+  }) async {
+    await supabase.from('menu_items').insert({
+      'name': name,
+      'price': price,
+      'image_url': imageUrl,
+      'category': category,
+    });
   }
 
-  Future<void> updateMenuItem(String id, String name, double price) async {
+  /// 🔹 UPDATE MENU ITEM
+  Future<void> updateMenuItem({
+    required String id, // ✅ STRING
+    required String name,
+    required double price,
+    required String imageUrl,
+    required String category,
+  }) async {
     await supabase
         .from('menu_items')
-        .update({'name': name, 'price': price})
+        .update({
+          'name': name,
+          'price': price,
+          'image_url': imageUrl,
+          'category': category,
+        })
         .eq('id', id);
   }
 
+  /// 🔹 DELETE MENU ITEM
   Future<void> deleteMenuItem(String id) async {
     await supabase.from('menu_items').delete().eq('id', id);
   }
