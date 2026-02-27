@@ -20,6 +20,7 @@ class SmallText extends StatelessWidget {
       style: TextStyle(
         color: color,
         fontWeight: FontWeight.w400,
+        letterSpacing: 0.3,
         fontSize: size,
         height: height,
       ),

@@ -45,11 +45,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/role-select': (context) => const RoleSelect(),
         '/admin-login': (context) => const AdminLoginPage(),
-
-        // ✅ FIXED
         '/admin-home': (context) => const AdminHomePage(),
-
-        '/staff-home': (context) => const HomePage(),
         '/customer-home': (context) => const HomePage(),
         '/cart': (context) => const CartPage(),
       },
